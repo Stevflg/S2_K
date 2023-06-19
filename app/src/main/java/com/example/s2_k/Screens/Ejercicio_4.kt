@@ -17,6 +17,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import com.example.s2_k.Data.IMC
 import com.example.s2_k.Data.Triangulo
 
 
@@ -41,42 +42,33 @@ fun Ejercicio_4(navController: NavController){
         Content_4(navController)
     }
 }
-var tri= Triangulo()
+var msjImc:String= ""
+var imc=IMC()
 @Composable
 fun Content_4(navController: NavController){
 
-    var lado1 by remember { mutableStateOf("") }
-    var lado2 by remember { mutableStateOf("") }
-    var lado3 by remember { mutableStateOf("") }
+    var Weight by remember { mutableStateOf("") }
+    var Height by remember { mutableStateOf("") }
     Column(modifier = Modifier.fillMaxSize(),
         horizontalAlignment = Alignment.CenterHorizontally ) {
-        Text("El siguiente ejercicio Comprobara si el triangulo es" +
-                "equilatero o no",
+        Text("Indice de Masa Corporal",
             fontSize = 18.sp,
             modifier = Modifier.padding(start = 30.dp, end = 30.dp))
         Spacer(modifier = Modifier.size(20.dp))
 
 
         OutlinedTextField(
-            value = lado1, onValueChange = { lado1 = it },
-            label = { Text("Lado 1") },
-            placeholder ={ Text ("Lado 1") },
+            value = Weight, onValueChange = { Weight = it },
+            label = { Text("Peso") },
+            placeholder ={ Text ("Peso en Kilos") },
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
             modifier = Modifier.padding(top = 10.dp)
         )
 
         OutlinedTextField(
-            value = lado2, onValueChange = { lado2 = it },
-            label = { Text("Lado 2") },
-            placeholder ={ Text ("Lado 2") },
-            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
-            modifier = Modifier.padding(top = 10.dp)
-        )
-
-        OutlinedTextField(
-            value = lado3, onValueChange = { lado3 = it },
-            label = { Text("Lado 3") },
-            placeholder ={ Text ("Lado 3") },
+            value = Height, onValueChange = { Height = it },
+            label = { Text("Altura") },
+            placeholder ={ Text ("Altura en Metros") },
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
             modifier = Modifier.padding(top = 10.dp)
         )
@@ -87,9 +79,29 @@ fun Content_4(navController: NavController){
 
         Button(onClick = {
             try {
-                tri.CargarDatos(lado1.toInt(),lado2.toInt(),lado3.toInt())
-                openDialog.value=true
+                if(Weight.toDouble() is Double && Height.toDouble() is Double)
+                {
+                    imc.setDatos(Weight.toDouble(),Height.toDouble())
+                    openDialog.value=true
+                    msjImc=imc.Mostar_Resultado()
+                    Weight=""
+                    Height=""
+                }
+                else{
+                    openDialog.value=true
+                    if(openDialog.value){
+                        msjImc="Compruebe los datos proporcionados"
+                        Weight=""
+                        Height=""
+                    }
+                }
             }catch (e: Exception){
+                openDialog.value=true
+                if(openDialog.value){
+                    msjImc="Compruebe los datos proporcionados"
+                    Weight=""
+                    Height=""
+                }
             }
         }, colors = ButtonDefaults.buttonColors(backgroundColor = Color.Gray),
             modifier = Modifier.padding(top = 20.dp)) {
@@ -97,18 +109,6 @@ fun Content_4(navController: NavController){
         }
 
         if (openDialog.value){
-            var mensaje= tri.lado_mayor() +"\n"+ tri.comprobar()
-            AlertDialog(onDismissRequest = {openDialog.value=false },
-                title = { Text(text = "Resultado") },
-                text = { Text(text = mensaje) },
-                confirmButton = { Button(onClick = {
-                    lado1=""
-                    lado2=""
-                    lado3=""
-                    openDialog.value = false
-                }) {
-                    Text("OK")
-                }
-                })
+            openDialog.value= Alert(mensaje = msjImc, Titulo = "Resultado",openDialog.value)
         } } }
 

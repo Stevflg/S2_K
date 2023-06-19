@@ -17,6 +17,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import com.example.s2_k.Data.Alumno
 import com.example.s2_k.Data.Triangulo
 
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
@@ -40,43 +41,43 @@ fun Ejercicio_2(navController: NavController){
         Content_2(navController)
     }
 }
-var triangulate= Triangulo()
+var mensaje: String=""
+var alumno= Alumno()
 @Composable
 fun Content_2(navController: NavController){
 
-    var lado1 by remember { mutableStateOf("") }
-    var lado2 by remember { mutableStateOf("") }
-    var lado3 by remember { mutableStateOf("") }
+    var Name by remember { mutableStateOf("") }
+    var Surname by remember { mutableStateOf("") }
+    var Score by remember { mutableStateOf("") }
     Column(modifier = Modifier.fillMaxSize(),
         horizontalAlignment = Alignment.CenterHorizontally ) {
         Spacer(modifier = Modifier.size(20.dp))
-        Text("El siguiente ejercicio Comprobara si el triangulo es" +
-                "equilatero o no",
+        Text("El siguiente ejercicio Comprobara nota del alumno",
             fontSize = 18.sp,
             modifier = Modifier.padding(start = 30.dp, end = 30.dp))
         Spacer(modifier = Modifier.size(20.dp))
 
 
         OutlinedTextField(
-            value = lado1, onValueChange = { lado1 = it },
-            label = { Text("Lado 1") },
-            placeholder ={ Text ("Lado 1") },
-            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+            value = Name, onValueChange = { Name = it },
+            label = { Text("Nombre") },
+            placeholder ={ Text ("Nombre") },
+            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text),
             modifier = Modifier.padding(top = 10.dp)
         )
 
         OutlinedTextField(
-            value = lado2, onValueChange = { lado2 = it },
-            label = { Text("Lado 2") },
-            placeholder ={ Text ("Lado 2") },
-            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+            value = Surname, onValueChange = {Surname = it },
+            label = { Text("Apellido") },
+            placeholder ={ Text ("Apellido") },
+            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text),
             modifier = Modifier.padding(top = 10.dp)
         )
 
         OutlinedTextField(
-            value = lado3, onValueChange = { lado3 = it },
-            label = { Text("Lado 3") },
-            placeholder ={ Text ("Lado 3") },
+            value = Score, onValueChange = { Score = it },
+            label = { Text("Puntaje") },
+            placeholder ={ Text ("Rango del (1-10)") },
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
             modifier = Modifier.padding(top = 10.dp)
         )
@@ -87,9 +88,29 @@ fun Content_2(navController: NavController){
 
         Button(onClick = {
             try {
-                triangulate.CargarDatos(lado1.toInt(),lado2.toInt(),lado3.toInt())
-                openDialog.value=true
+                if(Name is String && Surname is String && Score.toDouble() is Double && (Score.toDouble()>=0 && Score.toDouble()<11) ){
+                    alumno.setName(Name)
+                    alumno.setSurname(Surname)
+                    alumno.setScore(Score.toDouble())
+                    openDialog.value=true
+                    mensaje= alumno.Mostrar()
+                    Name=""
+                    Surname=""
+                    Score=""
+                }
+                else{
+                    openDialog.value=true
+                    if(openDialog.value){
+                        mensaje="Compruebe los datos proporcionados"
+                        Score=""
+                    }
+                }
             }catch (e: Exception){
+                openDialog.value=true
+                if(openDialog.value){
+                    mensaje="Compruebe los datos proporcionados"
+                    Score=""
+                }
             }
         }, colors = ButtonDefaults.buttonColors(backgroundColor = Color.Gray),
             modifier = Modifier.padding(top = 20.dp)) {
@@ -97,14 +118,16 @@ fun Content_2(navController: NavController){
         }
 
         if (openDialog.value){
-            var mensaje= triangulate.lado_mayor() +"\n"+ triangulate.comprobar()
-            AlertDialog(onDismissRequest = {openDialog.value=false },
+
+            /*AlertDialog(onDismissRequest = {openDialog.value=false },
                 title = { Text(text = "Resultado") },
                 text = { Text(text = mensaje) },
                 confirmButton = { Button(onClick = {
                     openDialog.value = false }) {
                     Text("OK")
                 }
-                })
+                })*/
+           // openDialog.value=false
+            openDialog.value= Alert(mensaje = mensaje, Titulo = "Resultado",openDialog.value)
         } } }
 

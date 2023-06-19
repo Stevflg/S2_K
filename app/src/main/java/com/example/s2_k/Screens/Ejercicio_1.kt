@@ -3,6 +3,7 @@ package com.example.s2_k.Screens
 import android.annotation.SuppressLint
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
@@ -18,6 +19,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.s2_k.Data.Triangulo
+import org.intellij.lang.annotations.JdkConstants.HorizontalAlignment
 import androidx.compose.runtime.remember as remember
 
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
@@ -28,7 +30,7 @@ fun Ejercicio_1(navController: NavController){
             Icon(imageVector = Icons.Default.ArrowBack, contentDescription = "Back",
             modifier = Modifier.clickable { navController.popBackStack() })
             Spacer(modifier = Modifier.size(10.dp))
-            Text(text = "Menu Principal",textAlign= TextAlign.Center,
+            Text(text = "Ejercicio 1",textAlign= TextAlign.Center,
                 fontFamily = FontFamily.Serif,
                 modifier = Modifier
                     .fillMaxWidth()
@@ -55,7 +57,6 @@ fun Content_1(navController: NavController){
             fontSize = 18.sp,
         modifier = Modifier.padding(start = 30.dp, end = 30.dp))
         Spacer(modifier = Modifier.size(20.dp))
-
 
         OutlinedTextField(
             value = lado1, onValueChange = { lado1 = it },
@@ -87,7 +88,7 @@ fun Content_1(navController: NavController){
 
         Button(onClick = {
             try {
-                triangulate.CargarDatos(lado1.toInt(),lado2.toInt(),lado3.toInt())
+                triangulo.CargarDatos(lado1.toInt(),lado2.toInt(),lado3.toInt())
                 openDialog.value=true
             }catch (e: Exception){
             }
@@ -98,9 +99,9 @@ fun Content_1(navController: NavController){
         }
 
         if (openDialog.value){
-            var mensaje= triangulate.lado_mayor() +"\n"+ triangulate.comprobar()
+            var mensaje= triangulo.lado_mayor() +"\n"+ triangulo.comprobar()
             AlertDialog(onDismissRequest = {openDialog.value=false },
-                title = { Text(text = "Resultado")},
+                title = { Text(text = "Resultado", textAlign = TextAlign.Center)},
                 text = { Text(text = mensaje)},
                 confirmButton = { Button(onClick = {
                     lado1=""
@@ -110,5 +111,7 @@ fun Content_1(navController: NavController){
                 }) {
                     Text("OK")
                 }})
-        } } }
+        }
+    }
+}
 

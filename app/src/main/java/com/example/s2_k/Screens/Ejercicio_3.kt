@@ -17,6 +17,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import com.example.s2_k.Data.Persona
 import com.example.s2_k.Data.Triangulo
 
 
@@ -41,13 +42,14 @@ fun Ejercicio_3(navController: NavController){
         Content_3(navController)
     }
 }
-var triangular= Triangulo()
+var msjPerson: String=""
+val person= Persona()
 @Composable
 fun Content_3(navController: NavController){
 
-    var lado1 by remember { mutableStateOf("") }
-    var lado2 by remember { mutableStateOf("") }
-    var lado3 by remember { mutableStateOf("") }
+    var Name by remember { mutableStateOf("") }
+    var Surname by remember { mutableStateOf("") }
+    var Age by remember { mutableStateOf("") }
     Column(modifier = Modifier.fillMaxSize(),
         horizontalAlignment = Alignment.CenterHorizontally ) {
         Spacer(modifier = Modifier.size(20.dp))
@@ -59,25 +61,25 @@ fun Content_3(navController: NavController){
 
 
         OutlinedTextField(
-            value = lado1, onValueChange = { lado1 = it },
-            label = { Text("Lado 1") },
-            placeholder ={ Text ("Lado 1") },
-            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+            value = Name, onValueChange = { Name = it },
+            label = { Text("Nombre") },
+            placeholder ={ Text ("Nombre") },
+            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text),
             modifier = Modifier.padding(top = 10.dp)
         )
 
         OutlinedTextField(
-            value = lado2, onValueChange = { lado2 = it },
-            label = { Text("Lado 2") },
-            placeholder ={ Text ("Lado 2") },
-            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+            value = Surname, onValueChange = { Surname = it },
+            label = { Text("Apellido") },
+            placeholder ={ Text ("Apellido") },
+            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text),
             modifier = Modifier.padding(top = 10.dp)
         )
 
         OutlinedTextField(
-            value = lado3, onValueChange = { lado3 = it },
-            label = { Text("Lado 3") },
-            placeholder ={ Text ("Lado 3") },
+            value = Age, onValueChange = { Age = it },
+            label = { Text("Edad") },
+            placeholder ={ Text ("Edad") },
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
             modifier = Modifier.padding(top = 10.dp)
         )
@@ -88,9 +90,30 @@ fun Content_3(navController: NavController){
 
         Button(onClick = {
             try {
-                triangular.CargarDatos(lado1.toInt(),lado2.toInt(),lado3.toInt())
-                openDialog.value=true
+                if(Name is String && Surname is String && Age.toInt() is Int && (Age.toInt()>0 && Age.toInt()<100))
+                {
+                    person.SetName(Name)
+                    person.SetSurName(Surname)
+                    person.SetAge(Age.toInt())
+                    openDialog.value=true
+                    msjPerson= person.Mostrar()
+                    Name=""
+                    Surname=""
+                    Age=""
+                }
+                else{
+                    openDialog.value=true
+                    if(openDialog.value){
+                        msjPerson="Compruebe los datos"
+                        Age=""
+                    }
+                }
             }catch (e: Exception){
+                openDialog.value=true
+                if(openDialog.value){
+                    msjPerson="Compruebe los datos"
+                    Age=""
+                }
             }
         }, colors = ButtonDefaults.buttonColors(backgroundColor = Color.Gray),
             modifier = Modifier.padding(top = 20.dp)) {
@@ -98,14 +121,6 @@ fun Content_3(navController: NavController){
         }
 
         if (openDialog.value){
-            var mensaje= triangular.lado_mayor() +"\n"+ triangular.comprobar()
-            AlertDialog(onDismissRequest = {openDialog.value=false },
-                title = { Text(text = "Resultado") },
-                text = { Text(text = mensaje) },
-                confirmButton = { Button(onClick = {
-                    openDialog.value = false }) {
-                    Text("OK")
-                }
-                })
+            openDialog.value= Alert(mensaje = msjPerson, Titulo = "Resultado",openDialog.value)
         } } }
 
