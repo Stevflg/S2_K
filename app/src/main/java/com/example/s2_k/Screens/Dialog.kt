@@ -13,7 +13,7 @@ fun Alert(mensaje: String, Titulo: String,State: Boolean):Boolean{
     val value = remember { mutableStateOf(State) }
     AlertDialog(onDismissRequest = {value.value=false },
         title = { Text(text = Titulo, textAlign = TextAlign.Center) },
-        text = { Text(text = mensaje, textAlign = TextAlign.Justify) },
+        text = { Text(text = mensaje, textAlign = TextAlign.Left) },
         confirmButton = { Button(onClick = {
             value.value =false }) {
             Text("OK")

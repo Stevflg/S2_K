@@ -16,9 +16,12 @@ class Alumno() {
     }
 
     fun Mostrar(): String{
-        if(Score>=4){
+        if(Score>=4 && Score<=9){
         return "Hola $Name $Surname \nSu nota es Regular : $Score"
-    }
+        }
+        if(Score==10.0){
+            return "Hola $Name $Surname \nSu nota es excelente : $Score"
+        }
         else{
             return "Hola $Name $Surname \nSu nota es  Pesima : $Score"
         }

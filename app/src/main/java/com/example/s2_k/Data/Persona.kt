@@ -30,7 +30,7 @@ class Persona (){
         this.Age=Age
     }
     fun Mostrar():String{
-        if(Age>18){
+        if(Age>17){
             return "Nombre: $Name \nApellido: $Surname \nEdad: ${Age.toString()} \n" +
                     "Usted es Mayor de edad"
         }

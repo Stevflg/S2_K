@@ -1,6 +1,7 @@
 package com.example.s2_k.Data
 
 import kotlin.math.round
+import kotlin.math.roundToInt
 
 
 class IMC (){
@@ -16,6 +17,6 @@ class IMC (){
     }
     fun Mostar_Resultado(): String{
         var IMC = Weight/(Height*2)
-        return  "Su IMC es de ${round(IMC)}"
+        return  "Su IMC es de ${String.format("%.2f",IMC)}"
     }
 }

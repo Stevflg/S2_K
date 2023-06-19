@@ -53,8 +53,7 @@ fun Content_3(navController: NavController){
     Column(modifier = Modifier.fillMaxSize(),
         horizontalAlignment = Alignment.CenterHorizontally ) {
         Spacer(modifier = Modifier.size(20.dp))
-        Text("El siguiente ejercicio Comprobara si el triangulo es" +
-                "equilatero o no",
+        Text("Implementacion de la clase Persona",
             fontSize = 18.sp,
             modifier = Modifier.padding(start = 30.dp, end = 30.dp))
         Spacer(modifier = Modifier.size(20.dp))
